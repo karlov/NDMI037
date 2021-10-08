@@ -1,0 +1,253 @@
+\section{\texorpdfstring{Introduction}{Introduction}}
+\vspace{5mm}
+\large
+
+\subsection{Course overview}
+
+\begin{itemize}
+	\item Finite graphs
+	\item Existence theorems
+	\item Algorithms, NP-completeness
+	\item Graph drawing
+\end{itemize}
+
+How much information do we need to store the drawing?
+
+Upward drawing: each edge directed upwards.
+
+Most of the time we talk about \textbf{Intersection graphs}.
+
+\subsection{Intersection graphs}
+
+\begin{definition}[Intersection graph]
+	Let $\A$ be a family of sets.
+	Then \textbf{the} intersection graph is
+	\[ IG(\A) = (\A, \{ ab: a\ne b, a \cap b \ne \emptyset, a, b \in \A \}) \]
+
+	Let $\M$ be a large family of sets, then G is \textbf{an} intersection graph of $\M$ if
+	\[ \exists A \subseteq \M: G \simeq IG(A) \]
+
+	Note that in a family an element can be repeated several times.
+\end{definition}
+
+\begin{observation}
+	IF $\M$ contains nonempty set, then $\forall$ complete graphs is in $\IG(\M)$.
+\end{observation}
+\begin{proof}
+	\begin{gather*}
+		A \in \M, A \ne \emptyset \\
+		V(K_n) = \{ u_1, u_2, \ldots, u_m \} \\
+	\end{gather*}
+	Every vertex $u$ is represented by $A$.
+\end{proof}
+
+\begin{observation}
+	\[ G \in \IG(\M) \iff \exists f:V(G) \to \M: \forall u \ne v \in V(G): uv \in E(G) \iff f(n) \cap f(v) \ne \emptyset \]
+\end{observation}
+
+\begin{observation}
+	$\forall \M: \IG(M)$ is \textbf{hereditary} if
+	\[ \forall G \in \IG(\M) \ \forall H \leq G: H \in IG(\M) \]
+
+	Induced subgraph is just deleting some edges, which in sets case means forgetting edges that represent sets.
+\end{observation}
+
+\begin{definition}[Interval graph]
+	% TODO Picture
+	Are intersection graphs of intervals on connected subsets of 1 dimensional Euclidian space.
+\end{definition}
+
+We are interested in \emph{arc connected} sets of the plain.
+\begin{definition}[Arc connected]
+	% TODO
+
+	Is different from topological connected.
+\end{definition}
+
+\begin{definition}[Circle graphs (CA)]
+	Arcs on a circle.
+\end{definition}
+
+\begin{definition}[Circular arc graphs (CIR)]
+	Chords on a circle.
+\end{definition}
+
+\begin{definition}[Polygon circle graphs (PC)]
+	Polygons that can be inscribed in a circle.
+\end{definition}
+
+\begin{definition}[Permutation graphs (PER)]
+	Segments connecting two parallel lines.
+
+	Formally:
+	\begin{gather*}
+		V(G) = \{ u_1, u_2, \ldots, u_m \} \\
+		\exists \pi \in Sym(m): u,v \in E \iff i < j \land \pi(i) > \pi (j)
+	\end{gather*}
+\end{definition}
+
+\begin{definition}[Function graphs (FUN)]
+	Curves connection two parallel lines.
+\end{definition}
+
+\begin{definition}[Segments graphs (SEG)]
+	Straight-line segments in the plane.
+\end{definition}
+
+\begin{definition}[String graphs (STRING)]
+	Curves in the plane.
+\end{definition}
+
+% TODO finish, statement
+For each 2 sets, take a point that lies in the intersection of these sets.
+Then connect unused dots by branching curve.
+
+Problems we want to solve:
+\begin{enumerate}
+	\item Given a graph, does it belong to the class.
+	\item How can we describe a representation. What size?
+	\item Given a graph and a representation, can we find max independent set, clique and so on.
+	Such questions that are NP-complete in general.
+\end{enumerate}
+
+Q: TODO is graph class recognition decidable?\\
+A: Yes, but not polynomial in all cases.
+
+INT, CA, CIR, PC, PER, FUN can be polynomially recognized.
+SEG, CONN are considered NP-hard.
+STRING is NP-complete.
+
+\[ \forall n \exists G_N \in SEG\]
+but in $\forall SEG$ segment representation there is a coordinate that is at least double exponential $2^{2^n}$, so even in bits are exponential.
+
+Representation of STRING graph: make each intersection as a vertex.
+All curves between intersection are edges.
+Then graph becomes planar.
+Planarity can be checked in Polynomial time.
+
+\[ \forall n \exists G_n \in STRING \forall \text{representation requires} \geq 2^{cn} \text{crossing points} \]
+
+\subsection{Chordal graphs}
+
+\begin{definition}[Chordal graph]
+	G is chordal if $\forall k \geq 4: C_k \not\leq G$.
+	Sometimes called triangulated graphs.
+\end{definition}
+
+\begin{definition}[Simplicial]
+	A vertex $u \in V(G)$ is simplicial  if $G[N_G(u)]$ (reduction of graph to  is a complete graph.
+	Definition is independent from taking closed (includes $u$) or open neighborhood.
+\end{definition}
+
+\begin{lemma}[1]
+	Every inclusion-vise minimal vertex cut in a chordal graph induces a clique.
+\end{lemma}
+\begin{proof}
+	$G\setminus A$ has components $V_1, V_2, \ldots V_k, k \geq 2$.
+	Then
+	\[ \forall i \forall u \in A \exists w \in V_i: uw \in E(G) \]
+	Pick some component $V_i$ and some edge in $A$ then there is an edge between them.
+	On the contrary, if there is no edge, $u$ can be removed from $A$.
+	Which contradicts with minimality of $A$.
+
+	% TODO picture
+	Now we take $u, v \in A$, by previous observation
+	\[ \exists w_1, w_2 \in V_i: uw_1, vw_2 \in E(G) \]
+	Then take $P_1$ shortest path between $w_1, w_2$.
+	Similarly $w_3, w_4 \in V_j$ and the shortest path $P_2$ between $w_3, w_4$.
+
+	$P_1 \cup P_2$ is an induced cycle unless $uv \in E(G)$.
+
+	Also, there is no edge between $V_i, V_j, i \ne j$ as o/w $A$ is not a cut.
+
+	As $P_1$ is shortest path $vw_1, uw_2 \notin E(G)$.
+
+	To sum up, $uv \in E(G)$.
+	Since $u,v$ were arbitrary, $A$ is a complete subgraph.
+\end{proof}
+
+\begin{lemma}[2]\label{chordal_lemma_2}
+	A chordal graph is complete or it contains 2 non-adjacent simplicial vertices.
+\end{lemma}
+\begin{proof}
+	By induction on $|V(G)|$.
+	The first step is $G$ is a complete graph.
+
+	Inductive step: $G$ is not complete.
+	Take a minimal vertex cut $A$.
+	Let $B$ be a connected component of $G\setminus A$ and $C = (V(G) \setminus A) \setminus B$.
+	\[ G_1 = G[B \cup A] \]
+	\[ G_2 = G[C \cup A] \]
+
+	% TODO picture
+
+	As $|V(G_1)| < |V(G)|$ we can apply induction on it.
+	Note that induced subgraph of chordal graph is also chordal.
+	By induction hypothesis $G_1, G_2$ are either complete or have 2 simplicial vertices.
+
+	One of the simplicial vertices cannot be in $A$ because $A$ is complete graph and simplicial vertices are not adjacent.
+	No edges can connect $B, C$ therefore both of the vertices are simplicial in $G$.
+\end{proof}
+
+\begin{corollary}
+	Every nonempty chordal graphs has a simplicial vertex.
+\end{corollary}
+
+Sometimes it is easier to proof stronger statement, because we have more power in inductive step.
+
+\begin{definition}[PES]
+	Perfect elimination scheme - for graph $G$ is a \emph{linear ordering} of its vertices.
+	\[ V(G) = u_1, \ldots, u_n\]
+	Such that $\forall i: u_i$ is simplicial for $G[\{ u_1, \ldots u_i\}]$
+\end{definition}
+
+\begin{note}
+	Every chordal graph allows a PES.
+\end{note}
+\begin{proof}
+	Take any simplicial vertices and move it to the right.
+	Then delete vertex picked in previous step and repeat.
+
+	Formally: by induction on n using corollary.
+\end{proof}
+
+\begin{definition}[Perfect graph]
+	G is perfect if for every subgraph chromatic number is equal to clique number.
+	\[ \forall H \leq G: \chi(H) = \omega(H) \]
+\end{definition}
+
+\begin{theorem}[Chordal is Perfect]
+	A chordal graph is perfect.
+\end{theorem}
+\begin{proof}
+	Take a PES for a graph, color from left to right by colors which a numbers
+	\[ \{ 1, 2, 3, \ldots \} \]
+	by \textbf{first fit method}.
+
+	Take smallest number that was not taken by the neighbors.
+
+	If we a forced to use color $k$ then neighbors of the vertex used $(k - 1)$ colors.
+	Meaning that on the left there is complete graph on $(k - 1$ vertices.
+\end{proof}
+
+\begin{definition}[Clique-tree decompositon]
+	Clique-tree decomposition of a graph $G$ is a tree $T$
+	\[ T = (\Q, F): V(T) = \Q = \{\text{maximal cliques of G} \} \]
+	and
+	\[ \forall u \in V(G): T[ \{Q: u \in Q \in \Q \}] \text{ is connected} \]
+\end{definition}
+
+\begin{theorem}[Chordal equivalent statements]
+	For any graph $G$ the following are equivalent:
+	\begin{enumerate}
+		\item $G$ is chordal
+		\item $G$ has a PES
+		\item G allows a Clique-tree decomposition
+		\item G is an intersection graph of subtrees of a tree
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	$1 \Rightarrow 2$ By induction on the number of vertices, using \cref{chordal_lemma_2}.
+	% TODO next lecture
+
+\end{proof}
