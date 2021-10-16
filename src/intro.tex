@@ -201,7 +201,7 @@ Sometimes it is easier to proof stronger statement, because we have more power i
 	Such that $\forall i: u_i$ is simplicial for $G[\{ u_1, \ldots u_i\}]$
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}[Chordal has PES]
 	Every chordal graph allows a PES.
 \end{lemma}
 \begin{proof}
@@ -221,17 +221,15 @@ Sometimes it is easier to proof stronger statement, because we have more power i
 \end{theorem}
 \begin{proof}
 	% TODO rewrite
-	Take a PES for a graph, color from left to right by colors which a numbers
-	\[ \{ 1, 2, 3, \ldots \} \]
-	by \textbf{first fit method}.
+	Take a PES for a graph, color from left to right by colors $ \in \{ 1, 2, 3, \ldots \}$ by \textbf{first fit method}.
 
 	Take smallest number that was not taken by the neighbors.
 
 	If we a forced to use color $k$ then neighbors of the vertex used $(k - 1)$ colors.
-	Meaning that on the left there is complete graph on $(k - 1)$ vertices.
+	Which implies existence of complete graph on $(k - 1)$ vertices on the left from current vertex.
 \end{proof}
 
-\begin{definition}[Clique-tree decompositon]
+\begin{definition}[Clique-tree decomposition]
 	Clique-tree decomposition of a graph $G$ is a tree $T$
 	\[ T = (\Q, F): V(T) = \Q = \{\text{maximal cliques of G} \} \]
 	and
@@ -287,8 +285,8 @@ Sometimes it is easier to proof stronger statement, because we have more power i
 	Therefore
 	\[ \exists e \in E(T_2): e \notin E(T_1), E(T_2) \]
 	Removing 1 edge makes tree disconnect:
-	% TODO disjpint union
-	\[ T \setminus e = T_a \cup T_b, V_{u_1} \subseteq V(T_a), V_{u_3} \subseteq V(T_b) \]
+	% TODO disjoint union
+	\[ T \setminus e = T_a \mathbin{\dot{\cup}} T_b, V_{u_1} \subseteq V(T_a), V_{u_3} \subseteq V(T_b) \]
 	Proceed by induction
 	\[ \forall j, j = 3 \ldots k: V(T_j) \subseteq T_b \]
 	inductive step
@@ -312,7 +310,7 @@ Therefore WLOG we may assume that all intervals are closed.
 Works because we have finite number of intervals.
 
 \begin{definition}[Interval graph(INT)]
-	\[ INT = IG(\{\text{interval on a line}) = IG(\{\text{closed intervals on a line}\}) \]
+	\[ INT = IG(\{\text{interval on a line}\}) = IG(\{\text{closed intervals on a line}\}) \]
 \end{definition}
 
 \begin{theorem}[Chordal equivalent statements]
@@ -339,14 +337,15 @@ Works because we have finite number of intervals.
 	% TODO picture
 	Let $x$ be the rightmost of the endpoints of $I_u, u \in Q$.
 	Then $x \in \bigcap_{u \in Q} I_n$
-	As o/w
+	As otherwise
 	\[ \exists v \in Q: x \notin I_v \]
 	Also
 	\[ \exists w \in Q: w = [x, \ldots] \Rightarrow I_v \cap I_w = \emptyset \]
-	and o/w $x$ was not the rightmost point.
+	and otherwise $x$ was not the rightmost point.
 
 	$G$ has maximal cliques: $Q = \{ Q_1, \ldots, Q_k \}$.
-	Let $p_1, \ldots, p_k$ be path s.t. $p_i \in \bigcap_{u \in Q_i} I_u$.
+	Let $p_1, \ldots, p_k$ be path such that
+	\[ p_i \in \bigcap_{u \in Q_i} I_u \]
 	It cannot happen that $p_i = p_{i + 1}$ as it means $Q_i \cap Q_{i + 1} = p_i$.
 	Combining the two will make a larger clique.
 	Therefore
@@ -359,8 +358,7 @@ Works because we have finite number of intervals.
 	\[ u \in Q_i, Q_h: i < h \]
 	We want for $i < j < h \Rightarrow p_i, p_g \in I_u \Rightarrow p_j \in I_u \Rightarrow q \in Q_j$.
 
-	$1 \Rightarrow 2$.
-	$2 \Rightarrow 1$.
+	$1 \iff 2$.
 
 	"$\Rightarrow$"
 
@@ -379,7 +377,7 @@ Works because we have finite number of intervals.
 		\item transitive $x \leq y \land y \leq z \Rightarrow x \leq z$ - edge between 2 connected
 	\end{enumerate}
 
-	$G$ is comparability graph $\iff \exists \Po = (P, \leq)$. s.t.
+	$G$ is comparability graph $\iff \exists \Po = (P, \leq)$, such that
 	\[ G \simeq (P, \{ xy: x\leq y \lor y \leq x \}) := C_G(\Po) \]
 
 	Comparing to Hasse diagram, comparability graph has more edges as in Hasse diagram we do not depict edges that come from transitivity.
@@ -396,7 +394,7 @@ Works because we have finite number of intervals.
 \end{observation}
 
 \begin{notation}[Graph Complement]
-	\[ -G = \left(V(G), \binom{V(G)}{2} - \setminus E(G)\right) \]
+	\[ -G = \left(V(G), \binom{V(G)}{2} \setminus E(G)\right) \]
 
 	If $\A$ is a class of graphs, then $co-\A = \{ -G: G \in \A \}$.
 \end{notation}
@@ -413,21 +411,22 @@ Works because we have finite number of intervals.
 	$FUN \subseteq co-CO$
 
 	Let $G \in FUN$ and $\{ c_u, u \in V(G) \}$ is a $FUN$ representation.
-	Having $u \ne v: uv \ne E(G) \Rightarrow c_u \cap c_v = \emptyset$
+	Having
+	\[ u \ne v: uv \ne E(G) \Rightarrow c_u \cap c_v = \emptyset \]
 
 	From the Jordan path theorem, plane is divided into 2 parts by the line.
-	$-G$ orient s.t. $u \rightarrow v \iff c_u$ lies below $c_v$.
+	$-G$ can be oriented such that $u \rightarrow v \iff c_u$ lies below $c_v$.
 
 	Therefore either $u \rightarrow v \lor v \rightarrow u$.
 
 	Orientation is transitive from %TODO picture.
 
 	$co-CO \subseteq FUN^{\ast} \subseteq FUN$
-	Having $G \in co-CO$ we can transitively orient non edges $\binom{V(G)}{2} - \setminus E(G)$.
+	Having $G \in co-CO$ we can transitively orient non edges $\binom{V(G)}{2} \setminus E(G)$.
 	Which corresponds to some partial order.
 
 	\begin{definition}[PO dimension]
-		Dimension of partial order is minimal number of linear orders $k$ s.t
+		Dimension of partial order is minimal number of linear orders $k$ such that
 		\[ \exists L_1, \ldots, L_k: \Po = \bigcap L_i \]
 	\end{definition}
 
@@ -437,8 +436,14 @@ Works because we have finite number of intervals.
 	Connect the occurrences of vertex on each line.
 
 	Take $u, v \in V(G)$ and check their lines
-	\[ uv \in E(G) \iff uv \notin E(-G) \Rightarrow uv \notin P \land vu \notin P \rightarrow \exists i \ne jL uv \in L_i \land vu \in L_j \Rightarrow c_u \cap c_v \ne \emptyset \]
+	\begin{gather*}
+		uv \in E(G) \iff uv \notin E(-G) \Rightarrow uv \notin P \land vu \notin P \\
+	\Rightarrow \exists i \ne jL uv \in L_i \land vu \in L_j \Rightarrow c_u \cap c_v \ne \emptyset
+	\end{gather*}
 	On the other hand
-	\[ wv \notin E(G) \Rightarrow uv \in E(-G) \Rightarrow uv \in \Po \lor vu \notin \Po \Rightarrow \forall i: uw \in L_i \Rightarrow c_u \cap c_w = \emptyset \]
+	\begin{gather*}
+		wv \notin E(G) \Rightarrow uv \in E(-G) \Rightarrow uv \in \Po \lor vu \notin \Po \\
+		\Rightarrow \forall i: uw \in L_i \Rightarrow c_u \cap c_w = \emptyset
+	\end{gather*}
 	Such piecewise continuous lines is the representation of the graph as a FUN graph.
 \end{proof}
