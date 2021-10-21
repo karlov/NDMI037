@@ -1,0 +1,294 @@
+\section{\texorpdfstring{Interval graphs}{Interval graphs}}
+\vspace{5mm}
+\large
+
+If there is an interval that is \emph{open} on one side, we can replace it by smaller one but closed.
+This does not change the graph.
+Therefore WLOG we may assume that all intervals are closed.
+
+Works because we have finite number of intervals.
+
+\begin{definition}[Interval graph(INT)]
+	\[ INT = IG(\{\text{interval on a line}\}) = IG(\{\text{closed intervals on a line}\}) \]
+\end{definition}
+
+\begin{theorem}[Chordal equivalent statements]
+	For any graph $G$ the following are equivalent:
+	\begin{enumerate}
+		\item $G \in INT$
+		\item $G$ allows a Clique-path decomposition
+		\item $G \in IG(\{\text{subpaths of a path}\})$
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	$1 \iff 3$
+	% TODO picture
+
+	Let $Q$ be a maximal clique of $G$.
+	All intervals that are represented by $Q$ intersect.
+	\[ \forall u,v \in Q: I_u \cap I_v \ne \emptyset \]
+	Intervals on a line have a Helly 2-property.
+	E.g. convex sets in the plain have Helly 3-property.
+
+	Therefore
+	\[ \bigcap_{u \in Q} I_n \ne \emptyset \]
+
+	% TODO picture
+	Let $x$ be the rightmost of the endpoints of $I_u, u \in Q$.
+	Then $x \in \bigcap_{u \in Q} I_n$
+	As otherwise
+	\[ \exists v \in Q: x \notin I_v \]
+	Also
+	\[ \exists w \in Q: w = [x, \ldots] \Rightarrow I_v \cap I_w = \emptyset \]
+	and otherwise $x$ was not the rightmost point.
+
+	$G$ has maximal cliques: $Q = \{ Q_1, \ldots, Q_k \}$.
+	Let $p_1, \ldots, p_k$ be path such that
+	\[ p_i \in \bigcap_{u \in Q_i} I_u \]
+	It cannot happen that $p_i = p_{i + 1}$ as it means $Q_i \cap Q_{i + 1} = p_i$.
+	Combining the two will make a larger clique.
+	Therefore
+	\[ p_1 < \ldots < p_k \]
+	Then
+	\[ P = (\Q, \{ Q_i, Q_{i + 1} | i = 1, 2, \ldots, k - 1 \}) \]
+	is a clique-path decomposition.
+
+	Having
+	\[ u \in Q_i, Q_h: i < h \]
+	We want for $i < j < h \Rightarrow p_i, p_g \in I_u \Rightarrow p_j \in I_u \Rightarrow q \in Q_j$.
+
+	$1 \iff 2$.
+
+	"$\Rightarrow$"
+
+	\[ uv \in E(G) \Rightarrow \exists i: u,v \in Q_i \Rightarrow Q_i \in V_u \cap V_v \ne \emptyset \]
+
+	"$\Leftarrow$"
+	\[ V_u \cap V_v \in Q_i \Rightarrow u,v \in Q_i \Rightarrow  uv \in E(G) \]
+
+\end{proof}
+
+\begin{definition}[Comparability graphs (CO)]
+	POSET is $\Po = (P, \leq)$, $\leq$ is
+	\begin{enumerate}
+		\item antireflexive $x \not \leq x$ - no loops
+		\item antisymmetric $x \leq y \Rightarrow y \not \leq x$ - no oriented 2 cycles
+		\item transitive $x \leq y \land y \leq z \Rightarrow x \leq z$ - edge between 2 connected
+	\end{enumerate}
+
+	$G$ is comparability graph $\iff \exists \Po = (P, \leq)$, such that
+	\[ G \simeq (P, \{ xy: x\leq y \lor y \leq x \}) := C_G(\Po) \]
+
+	Comparing to Hasse diagram, comparability graph has more edges as in Hasse diagram we do not depict edges that come from transitivity.
+\end{definition}
+
+\begin{observation}
+	How to check if graph is comparability?
+	Orient every edge from the smaller to larger element.
+	$G \in CO \iff$ edges of $G$ can be transitively oriented.
+
+	Every edge gets only 1 orientation.
+
+	Note that such orientation preserves antireflexive and antisymmetric property.
+\end{observation}
+
+\begin{notation}[Graph Complement]
+	\[ -G = \left(V(G), \binom{V(G)}{2} \setminus E(G)\right) \]
+
+	If $\A$ is a class of graphs, then $co-\A = \{ -G: G \in \A \}$.
+\end{notation}
+
+\begin{theorem}[Complements]
+	.
+	\begin{enumerate}
+		\item $FUN = co-CO$
+		\item $PER = CO \cap co-CO$
+		\item $INT = CHOR \cap co-CO$
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	$FUN \subseteq co-CO$
+
+	Let $G \in FUN$ and $\{ c_u, u \in V(G) \}$ is a $FUN$ representation.
+	Having
+	\[ u \ne v: uv \ne E(G) \Rightarrow c_u \cap c_v = \emptyset \]
+
+	From the Jordan path theorem, plane is divided into 2 parts by the line.
+	$-G$ can be oriented such that $u \rightarrow v \iff c_u$ lies below $c_v$.
+
+	Therefore either $u \rightarrow v \lor v \rightarrow u$.
+
+	Orientation is transitive from %TODO picture.
+
+	$co-CO \subseteq FUN^{\ast} \subseteq FUN$
+	Having $G \in co-CO$ we can transitively orient non edges $\binom{V(G)}{2} \setminus E(G)$.
+	Which corresponds to some partial order.
+
+	\begin{definition}[PO dimension]
+		Dimension of partial order is minimal number of linear orders $k$ such that
+		\[ \exists L_1, \ldots, L_k: \Po = \bigcap L_i \]
+	\end{definition}
+
+	Take $k$ vertical lines and make $n$ points on each of the line.
+	Points on the line correspond to $V(G)$.
+	Put vertices in the order of linear order $L_i$ for line $i$.
+	Connect the occurrences of vertex on each line.
+
+	Take $u, v \in V(G)$ and check their lines
+	\begin{gather*}
+		uv \in E(G) \iff uv \notin E(-G) \Rightarrow uv \notin P \land vu \notin P \\
+	\Rightarrow \exists i \ne j uv \in L_i \land vu \in L_j \Rightarrow c_u \cap c_v \ne \emptyset
+	\end{gather*}
+	On the other hand
+	\begin{gather*}
+		wv \notin E(G) \Rightarrow uv \in E(-G) \Rightarrow uv \in \Po \lor vu \notin \Po \\
+		\Rightarrow \forall i: uw \in L_i \Rightarrow c_u \cap c_w = \emptyset
+	\end{gather*}
+	Such piecewise continuous lines is the representation of the graph as a FUN graph.
+
+% 3rd lecture
+	\begin{lemma}
+		\[ co-PER \subseteq PER \]
+	\end{lemma}
+	\begin{proof}
+		Given a representation, swap order of the right side.
+
+		If $uv \in E(G)$ then after transformation edges would not cross.
+		Otherwise $uv \notin E(G)$ then edges do not cross but after the transformation edges cross.
+	\end{proof}
+
+	\begin{consequence}
+		Complements of the permutation graphs are permutation graphs
+	\end{consequence}
+	\begin{proof}
+		if $co-PER \subseteq PER \Rightarrow$:
+		\[ PER = co-(co-PER) \subseteq co-PER \]
+		Therefore
+		\[ PER = co-(co-PER) \]
+	\end{proof}
+
+	Proof of 2.
+	"$PER \subseteq CO \cap co-CO$" then using lemma and 1. we get
+	\[ PER \subseteq FUN = co-CO \]
+	\[ PER = co-PER \subseteq co-(co-CO) = CO \]
+
+	"$CO \cap co-CO \subseteq PER$" Let $G$ is a graph, $G \in CO \cap co-CO$.
+	$E(G)$ can be transitively oriented, let $E_1$ be such orientation.
+	Also, edges of the complements can be transitively oriented, let $E_2$ be such orientation.
+	Taking union $E_1 \cup E_2$ of both orientations as binary relations gives orientation on $K_{V(G)}$.
+	New relation is \emph{antisymmetric}, \emph{antireflexive} and also \textbf{transitive}.
+	Transitivity can be proved by checking all combinations of 2 edges $u_1,u_2 \in E_1, E_2$.
+	It is also a linear order, because of the complete graph.
+
+	\begin{observation}[Reverse transitive orientation]
+		Note that reverse of the transitive orientation is also transitive.
+	\end{observation}
+
+	Draw a linear order $E_1 \cup E_2$ on left line and $E_1^{-1} \cup E_2$ of the right.
+	If $uv \in E(G)$ then $uv$ is oriented in $E_1$, on the right line the order is reversed therefore lines cross.
+	\[ S_u \cap S_v \ne \emptyset \]
+	If $wu \notin E(G)$ it is oriented in $E_2$.
+	Therefore lines do not cross.
+	\[ S_u \cap S_2 = \emptyset \]
+
+	3. Interval graphs are chordal as they are intersection graphs of subpath (connected subpaths) on a path.
+	Which is a subclass if connected subgraphs of trees = Chordal.
+
+	"$INT \subseteq co-Co$". Let $G \in INT$.
+	$-G$ is a graph of disjoint intervals.
+	Natural transitive orientation of disjoint intervals is "being to the left/right".
+
+	"$CHOR \cap co-Co \subseteq INT$". Suppose $G \in CHOR \cap co-Co$ and $E_2$ is transitive orientation of non-edges of $G$.
+	Let $\Q$ be a set of all maximal cliques of $G$.
+	Define $Q_i < Q_j \in \Q: \exists u \in Q_i, v \in Q_j: (u \rightarrow v) \in E_2$.
+	Properties of relation on cliques:
+	\begin{itemize}
+		\item antireflexive: as clique is a complete graph and $u\rightarrow v \land v \rightarrow u$ cannot happen.
+		\item antisymmetric \\
+			Suppose $Q_i < Q_j \Rightarrow \exists u \in Q_i, v \in Q_j: (u \rightarrow v) \in E_2$ and if $Q_j < Q_i$ by contradiction.
+			\[ Q_j < Q_i \exists x: Q_i, y \in Q_k: yx \in E_2 \]
+			Cases:
+			% TODO finish paper
+			\begin{enumerate}
+				\item $y = v, x \ne v$
+				\item $y \ne v, x = v$ same as 1.
+			\end{enumerate}
+		\item transitive\\
+			$Q_i < Q_j < Q_h \Rightarrow Q_i < Q_h$
+			\[ \exists x \in Q_i, u,v \in Q_j: \exists y \in Q_H : xu,vy \in E_2 \]
+			Cases
+			\begin{enumerate}
+				\item $u = v \Rightarrow x \rightarrow u \rightarrow y \Rightarrow x \rightarrow y$ by transitivity.
+				\item $u \ne v$, subcases
+					\begin{enumerate}
+						\item $xv \notin E(G) \Rightarrow xv \in E_2 \Rightarrow x \rightarrow y$.
+							By transitivity of $E_2$
+						\item $uy \notin E(G)$ similar to a)
+						\item $xv, uy \in E(G)$, subcases
+						\begin{enumerate}
+							\item $xv \notin E(G) \Rightarrow yx \in E_2 \stackrel{\text{transitivity}}{\rightarrow} yu \in E_2 \Rightarrow uy \notin E(G)$ contradiction
+								Or $xy \in E_2 \Rightarrow Q_i < Q_h$.
+							\item $xy \in E(G) \Rightarrow C_4 \leq_I G$ contradiction with Chordal.
+						\end{enumerate}
+					\end{enumerate}
+			\end{enumerate}
+		\item transitive\\
+	\end{itemize}
+
+	It is also a total order
+	\[ \forall i \ne j: Q_i < Q_j \lor Q_j < Q_i \]
+	As $Q_i \ne Q_j \Rightarrow u \in Q_i \setminus Q_j$.
+	\[ u \notin Q_j \Rightarrow v \in Q_j: uv \notin E(G) \]
+	As otherwise, clique is not maximal.
+	Then $uv$ is oriented one way or another.
+
+	Take $Q_i$ as vertices and make edges $Q_{i}Q{i - 1}$.
+	We claim that this graph is a clique path for $G$.
+
+	It remains to prove:
+	\[ \forall i < j < h \forall u \in V(G): u \in Q_i \land Q_h \Rightarrow u \in Q_j \]
+	Suppose $u \notin Q_j \Rightarrow \exists v \in Q_j: uv \notin E(G)$
+	\begin{gather*}
+		Q_i < Q_j \Rightarrow uv \in E_2 \\
+		Q_j < Q_h \Rightarrow vu \in E_2
+	\end{gather*}
+	Contradiction with antisymmetric relation.
+\end{proof}
+
+\subsection{Interval Filament graphs}
+
+\begin{definition}[Interval Filament graph(IFA)]
+	\[ IFA = \IG(\text{interval filaments on the half plane}) \]
+
+	Were introduced by F.Gavril (2000) as an attempt to generalize graphs for which we can find maximal clique in polynomial time.
+\end{definition}
+
+\begin{observation}
+	\begin{itemize}
+		\item $INT \subseteq IFA$ we can draw interval as a half rectangle.
+		\item $CHOR \subseteq IFA$
+		\item $PER \subseteq IFA$
+		\item $FUN \subseteq IFA$ extend the intervals to new line placed below every point of the representation.
+		\item $CIR \subseteq IFA$
+		\item $CA \subseteq IFA$
+		\item $PC \subseteq IFA$
+	\end{itemize}
+\end{observation}
+
+\begin{exercise}
+	Prove that $CHO \subseteq PC \Rightarrow CHO \subseteq IFA$
+\end{exercise}
+
+\begin{definition}[$\A$-mixed graphs]
+	If $\A$ is a class of graphs, $\A$-mixed graph if it allowes partition $E = E_1 \dot{\cup} E_2$ and a transitive orientation such that
+	\begin{enumerate}
+		\item $(V, E) \in \A$
+		\item $\forall u, v, w \in uv \in E_2 \land vw \in E_1 \Rightarrow uw \in E_1$
+	\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Complements]
+	\[ co-IFA = (co-INT)-mixed \]
+\end{theorem}
+\begin{proof}
+\end{proof}

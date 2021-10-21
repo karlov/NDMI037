@@ -1,0 +1,173 @@
+\section{\texorpdfstring{Chordal graphs}{Chordal graphs}}
+\vspace{5mm}
+\large
+
+\begin{definition}[Chordal graph]
+	G is chordal if $\forall k \geq 4: C_k \not\leq_{ind} G$.
+	Sometimes called triangulated graphs.
+\end{definition}
+
+\begin{definition}[Simplicial]
+	A vertex $u \in V(G)$ is simplicial  if $G[N_G(u)]$ (reduction of graph to neighborhood of $u$) is a complete graph.
+	Definition is independent from taking closed (includes $u$) or open neighborhood.
+\end{definition}
+
+\begin{lemma}[1]
+	Every inclusion-wise minimal vertex cut in a chordal graph induces a clique.
+\end{lemma}
+\begin{proof}
+	$G\setminus A$ has components $V_1, V_2, \ldots V_k, k \geq 2$.
+	Then
+	\[ \forall i \forall u \in A \exists w \in V_i: uw \in E(G) \]
+	Pick some component $V_i$ and some edge in $A$ then there is an edge between them.
+	On the contrary, if there is no edge, $u$ can be removed from $A$.
+	Which contradicts with minimality of $A$.
+
+	% TODO picture
+	Now we take $u, v \in A$, by previous observation
+	\[ \exists w_1, w_2 \in V_i: uw_1, vw_2 \in E(G) \]
+	Then take $P_1$ shortest path between $w_1, w_2$.
+	Similarly $w_3, w_4 \in V_j$ and the shortest path $P_2$ between $w_3, w_4$.
+
+	$P_1 \cup P_2$ is an induced cycle unless $uv \in E(G)$.
+
+	Also, there is no edge between $V_i$ and $V_j, i \ne j$ as otherwise $A$ is not a cut.
+
+	As $P_1$ is shortest path $vw_1, uw_2 \notin E(G)$.
+
+	To sum up, $uv \in E(G)$.
+	Since $u,v$ were arbitrary, $A$ is a complete subgraph.
+\end{proof}
+
+\begin{lemma}[2]\label{chordal_lemma_2}
+	A chordal graph is complete or it contains 2 non-adjacent simplicial vertices.
+\end{lemma}
+\begin{proof}
+	By induction on $|V(G)|$.
+	The first step is $G$ is a complete graph.
+
+	Inductive step: $G$ is not complete.
+	Take a minimal vertex cut $A$.
+	Let $B$ be a connected component of $G\setminus A$ and $C = (V(G) \setminus A) \setminus B$.
+	\[ G_1 = G[B \cup A] \]
+	\[ G_2 = G[C \cup A] \]
+
+	% TODO picture
+
+	As $|V(G_1)| < |V(G)|$ we can apply induction on it.
+	Note that induced subgraph of chordal graph is also chordal.
+	By induction hypothesis $G_1, G_2$ are either complete or have 2 simplicial vertices.
+
+	One of the simplicial vertices cannot be in $A$ because $A$ is complete graph and simplicial vertices are not adjacent.
+	No edges can connect $B, C$ therefore both of the vertices are simplicial in $G$.
+\end{proof}
+
+\begin{corollary}
+	Every nonempty chordal graphs has a simplicial vertex.
+\end{corollary}
+
+Sometimes it is easier to proof stronger statement, because we have more power in inductive step.
+
+\begin{definition}[PES]
+	Perfect elimination scheme - for graph $G$ is a \emph{linear ordering} of its vertices.
+	\[ V(G) = u_1, \ldots, u_n\]
+	Such that $\forall i: u_i$ is simplicial for $G[\{ u_1, \ldots u_i\}]$
+\end{definition}
+
+\begin{lemma}[Chordal has PES]
+	Every chordal graph allows a PES.
+\end{lemma}
+\begin{proof}
+	Take any simplicial vertices and move it to the right.
+	Then delete vertex picked in previous step and repeat.
+
+	Formally: by induction on $n$ using corollary.
+\end{proof}
+
+\begin{definition}[Perfect graph]
+	$G$ is perfect if for every subgraph chromatic number is equal to clique number.
+	\[ \forall H \leq G: \chi(H) = \omega(H) \]
+\end{definition}
+
+\begin{theorem}[Chordal is Perfect]
+	A chordal graph is perfect.
+\end{theorem}
+\begin{proof}
+	% TODO rewrite
+	Take a PES for a graph, color from left to right by colors $ \in \{ 1, 2, 3, \ldots \}$ by \textbf{first fit method}.
+
+	Take smallest number that was not taken by the neighbors.
+
+	If we a forced to use color $k$ then neighbors of the vertex used $(k - 1)$ colors.
+	Which implies existence of complete graph on $(k - 1)$ vertices on the left from current vertex.
+\end{proof}
+
+\begin{definition}[Clique-tree decomposition]
+	Clique-tree decomposition of a graph $G$ is a tree $T$
+	\[ T = (\Q, F): V(T) = \Q = \{\text{maximal cliques of G} \} \]
+	and
+	\[ \forall u \in V(G): T[ \{Q: u \in Q \in \Q \}] \text{ is connected} \]
+\end{definition}
+
+\begin{theorem}[Chordal equivalent statements]
+	For any graph $G$ the following are equivalent:
+	\begin{enumerate}
+		\item $G$ is chordal
+		\item $G$ has a PES
+		\item $G$ allows a Clique-tree decomposition
+		\item $G$ is an intersection graph of subtrees of a tree
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	$1 \Rightarrow 2$ By induction on the number of vertices, using \cref{chordal_lemma_2}.
+	Pick simplicial vertex, put it at the end of PES.
+	Remove vertex from graph and continue.
+
+	$2 \Rightarrow 3$ let we have a PES $\{ u_1, \ldots u_n \}$.
+	$G$ has maximal cliques: $Q = \{ Q_1, \ldots, Q_k \}$, $T = (\Q, E(T))$.
+	Remove last vertex in PES from graph
+	\[ G^{'} = G \setminus u_n \]
+	It has cliques: $Q^{'} = \{ Q_1^{'}, \ldots, Q_k^{'} \} \Rightarrow$ by i.h
+	\[ \exists T^{'} = (\Q^{'}, E(T^{'}) \]
+	Consider 2 cases: $N_G(u_n) \cup \{ u_n \}$ is a maximal clique.
+	Then is a maximal clique in $G^{'}$.
+
+	O/w $N_G(u_n)$ is not a maximal clique of $G^{'}$.
+	$\Rightarrow \exists Q_i^{'} \in \Q^{'}: N_G(u_n) \subsetneq Q_i^{'}$.
+	We connect $N_G(u_n)$ to $Q_i^{'}$.
+
+	$3 \Rightarrow 4$ we want to find an intersection graph of subtrees in tree.
+	\[ G \simeq IF(\{T_u: u \in V(G) \}) \]
+	such that
+	\[ V(T_u) = \{ Q_i: y \in Q_i \} \subseteq \Q \]
+
+	Proving the equivalence:
+	\[ uv \in E(G) \Rightarrow \exists Q_i \in \Q: u,v \in Q_i \Rightarrow Q_i \in V(T_u) \cap V(T_v) \neq \emptyset \]
+	On the other hand
+	\[ V(T_u) \cap V(T_v) \neq \emptyset \Rightarrow \exists Q_i \in V(T_u) \cap V(T_v) \Rightarrow u, v \in Q_i \Rightarrow uv \in E(G) \]
+
+	$4 \Rightarrow 1$ Let we have a tree $T$ with a collection of subtrees.
+	\[V_u \subseteq V(T), u \in V(G): T[V_u] \text{ is connected}: \forall u \ne v \in V(G): uv \in E(G) \iff V_u \cap V_v \ne \emptyset \]
+	Assume by contradiction $G$ is not chordal.
+	By definition $\exists k \geq 4 \in \N: C_k \leq_{ind} G$.
+	Let the cycle be $\{ u_1, u_2, \ldots, u_k \}$.
+	$u_k u_1 \in E(G)$ by the assumption, take
+	\[ T_1 = T[V_{u_1}], T_2 = T[V_{u_2}], T_3 = T[V_{u_3}] \]
+	$T_1$ should cross $T_2$, also $T_3$ should cross $T_2$ but not $T_1$.
+	\[ V_{u_1} \cap V_{u_2} \ne \emptyset \land V_{u_1} \cap V_{u_3} = \emptyset \]
+	Therefore
+	\[ \exists e \in E(T_2): e \notin E(T_1), E(T_2) \]
+	Removing 1 edge makes tree disconnect:
+	% TODO disjoint union
+	\[ T \setminus e = T_a \mathbin{\dot{\cup}} T_b, V_{u_1} \subseteq V(T_a), V_{u_3} \subseteq V(T_b) \]
+	Proceed by induction
+	\[ \forall j, j = 3 \ldots k: V(T_j) \subseteq T_b \]
+	inductive step
+	\[ V_{u_j} \subseteq V(T_b), V_{u_{j + 1}} \cap V(T_b) \neq \emptyset, V_{u_{j + 1}} \cap V_{u_2} \ne \emptyset \Rightarrow V_{u_{j + 1}} \subseteq V(T_b)\]
+	Therefore
+	\[ V_{u_k} \cap V_{u_1} = \emptyset \]
+	which contradicts $u_k u_1 \in E(g)$.
+
+	% TODO next lecture
+
+\end{proof}
